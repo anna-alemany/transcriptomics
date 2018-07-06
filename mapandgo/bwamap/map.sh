@@ -43,13 +43,13 @@ fi
 #### clean fastq file ####
 if [ $protocol == 'celseq1' ]
 then
-    python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile bc_celseq1.tsv --cbchd 0 --lenumi 4
+    python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile {path2scripts}/bc_celseq1.tsv --cbchd 0 --lenumi 4
 elif [ $protocol == 'celseq2' ]
 then
-    python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile bc_celseq2.tsv --cbchd 0 --lenumi 6 --umifirst
+    python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile {path2scripts}/bc_celseq2.tsv --cbchd 0 --lenumi 6 --umifirst
 elif [ $protocol == 'scscar' ]
 then
-    python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile bc_scarsc.tsv --cbchd 0 --lenumi 3 --umifirst
+    python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile {path2scripts}/bc_scarsc.tsv --cbchd 0 --lenumi 3 --umifirst
 else
     echo 'Protocol [celseq1, celseq2, scscar] not specified'
 fi
@@ -59,7 +59,7 @@ if [ $reference == 'human' ]
 then
     ref=/hpc/tmp/Mauro/refGenomes/hg19/hg19_RefSeq_genes_clean_ERCC92_fl.fa
 fi
-${path2bwa}/bwa mem -t 8 ${ref} ${fq}_cbc.fastq > ${fq}.sam
+${path2bwa}/bwa mem -t 8 ${ref} ${outfq}_cbc.fastq > ${outfq}.sam
 
 #### tabulator ####
 
