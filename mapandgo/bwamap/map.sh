@@ -1,3 +1,12 @@
+#/bin/bash
+
+# created: 06-06-2018, Anna Alemany (Avo lab)
+# The script first takes as input the root name of a set of fastq files (R1, R2) and, when required, merges the different lanes.
+# Next, if filters out reads that do not have a proper protocol structure (specific cell-seq barcode, UMI position and length, etc). 
+# Only the biological read is kept, polyA read is filtered out.
+# bwa mapping to the biological read, annotated with cell-seq barcode and UMI in the read's name.
+# Finaly, the count tables are created.
+
 path2bwa=/hpc/tmp/avo/bwa/
 path2scripts=/hpc/tmp/aalemany/bin/mapandgo/
 
