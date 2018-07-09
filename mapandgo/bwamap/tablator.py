@@ -102,4 +102,5 @@ tdf.to_csv(ftrunk + '.coutt.tsv', sep = '\t')
 f = open(ftrunk + '.log', 'a')
 print >> f, 'reads mapped:', cdf.sum().sum()
 print >> f, 'mappability:', 1.0*cdf.sum().sum()/idx
+print >> f, 'mean overseq:', (cdf/bdf).mean().mean()
 f.close()
