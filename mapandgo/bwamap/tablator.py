@@ -97,3 +97,9 @@ ftrunk = inputSamFile[:-4]
 cdf.to_csv(ftrunk + '.coutc.tsv', sep = '\t')
 bdf.to_csv(ftrunk + '.coutb.tsv', sep = '\t')
 tdf.to_csv(ftrunk + '.coutt.tsv', sep = '\t')
+
+### log file ####
+f = open(ftrunk + '.log', 'a')
+print >> f, 'reads mapped:', cdf.sum().sum()
+print >> f, 'mappability:', 1.0*cdf.sum().sum()/idx
+f.close()
