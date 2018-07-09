@@ -15,7 +15,7 @@ then
     echo "Please, give the following inputs in this order"
     echo "1) library name (name until 1_R*_001.fastq.gz)"
     echo "2) pool lanes [y, n]"
-    echo "3) protocol: celseq1, celseq2, scscar"
+    echo "3) protocol: celseq1, celseq2, scscar, n (to skip concatenation step)"
     echo "4) reference genome [human]"
     exit
 fi
@@ -44,12 +44,18 @@ fi
 if [ $protocol == 'celseq1' ]
 then
     python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile {path2scripts}/bc_celseq1.tsv --cbchd 0 --lenumi 4
+    gzip ${outfq}_cbc.fastq
 elif [ $protocol == 'celseq2' ]
 then
     python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile {path2scripts}/bc_celseq2.tsv --cbchd 0 --lenumi 6 --umifirst
+    gzip ${outfq}_cbc.fastq
 elif [ $protocol == 'scscar' ]
 then
     python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile {path2scripts}/bc_scarsc.tsv --cbchd 0 --lenumi 3 --umifirst
+    gzip ${outfq}_cbc.fastq
+elif [ $protocol == 'n' ]
+then
+    continue
 else
     echo 'Protocol [celseq1, celseq2, scscar] not specified'
 fi
@@ -65,4 +71,4 @@ ${path2bwa}/bwa mem -t 8 ${ref} ${outfq}_cbc.fastq > ${outfq}.sam
 
 
 #### zip files ####
-gzip ${outfq}_cbc.fastq
+
