@@ -74,6 +74,7 @@ with open(inputSamFile) as f:
 
 
 df = pd.DataFrame(cnt)
+df = df.loc[df.sum(axis=1).sort_values(ascending=False).index]
 cdf = df.applymap(lambda x: sum(x.values()) if type(x)==Counter else 0)
 bdf = df.applymap(lambda x: len(x) if type(x)==Counter else 0)
 
