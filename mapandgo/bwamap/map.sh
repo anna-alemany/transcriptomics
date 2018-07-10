@@ -35,7 +35,7 @@ then
     gzip ${outfq}_R2.fastq
 elif [ $pool == 'n' ]
 then
-    continue
+    break
 else
     echo 'Pool lanes [y/n] not specified'
 fi
@@ -55,7 +55,7 @@ then
     gzip ${outfq}_cbc.fastq
 elif [ $protocol == 'n' ]
 then
-    continue
+    break
 else
     echo 'Protocol [celseq1, celseq2, scscar] not specified'
 fi
@@ -64,11 +64,16 @@ fi
 if [ $reference == 'human' ]
 then
     ref=/hpc/tmp/Mauro/refGenomes/hg19/hg19_RefSeq_genes_clean_ERCC92_fl.fa
+    ${path2bwa}/bwa mem -t 8 ${ref} ${outfq}_cbc.fastq > ${outfq}.sam
+elif [ $reference == 'n' ] 
+then
+    break
+else
+    ${path2bwa}/bwa mem -t 8 ${ref} ${outfq}_cbc.fastq > ${outfq}.sam
 fi
-${path2bwa}/bwa mem -t 8 ${ref} ${outfq}_cbc.fastq > ${outfq}.sam
 
 #### tabulator ####
+python ${path2scripts}/tablator.py ${outfq}.sam
 
 
-#### zip files ####
 
