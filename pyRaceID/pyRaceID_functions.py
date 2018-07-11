@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-form collections import Counter
+from collections import Counter
 
 def downsample(df, n):
     df = df.round().astype(int)
