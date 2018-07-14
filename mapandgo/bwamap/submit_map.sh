@@ -1,67 +1,22 @@
 #!/bin/bash
+email=a.alemany@hubrecht.eu
+Dt=20:30:00
+Dmem=10G
+threads=1
 
-path2bwa=/hpc/tmp/avo/bwa/
-path2scripts=/hpc/tmp/aalemany/bin/mapandgo/
-
-if [ $# -ne 4 ]
+if [ $# -ne 5 ]
 then
-    echo "Please, give the following inputs in this order"
-    echo "1) library name (name until 1_R*_001.fastq.gz)"
+    echo "Please, give in this order the following inputs"
+    echo "1) root of fastq.gz files to map together (common part in all of them)"
     echo "2) pool lanes [y, n]"
-    echo "3) protocol: celseq1, celseq2, scscar, n [to skip concatenator step]"
-    echo "4) reference genome [human]"
+    echo "3) protocol. Options are: [celseq1, celseq2, scarsc, n (to skip concatenation)]"
+    echo "4) reference genome/transcriptome (full path OR any of [mouse, human, elegans, briggsae, zebrafish, zebrafishDNA, zebrafishGFP], n (to skip mapping))"
+    echo "5) maximum hamming distance to collapse cel barcodes."
     exit
 fi
 
 fq=$1
 outfq=${fq%_*_S*_L*}
-pool=$2
-protocol=$3
-reference=$4
 
-#### pool lanes ####
-if [ $pool == 'y' ]
-then
-    zcat ${fq}*R1* > ${outfq}_R1.fastq
-    zcat ${fq}*R2* > ${outfq}_R2.fastq
-    gzip ${outfq}_R1.fastq
-    gzip ${outfq}_R2.fastq
-elif [ $pool == 'n' ]
-then
-    continue
-else
-    echo 'Pool lanes [y/n] not specified'
-fi
+echo "/hpc/hub_oudenaarden/aalemany/bin/mapandgo/map.sh $1 $2 $3 $4 $5" | qsub -cwd -N map-${outfq} -o map-${outfq}.out -e map-${outfq}.err -m eas -M ${email} -pe threaded ${threads} -l h_rt=${Dt} -l h_vmem=${Dmem} -V 
 
-#### clean fastq file ####
-if [ $protocol == 'celseq1' ]
-then
-    python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile ${path2scripts}/bc_celseq1.tsv --cbchd 0 --lenumi 4
-    gzip ${outfq}_cbc.fastq
-elif [ $protocol == 'celseq2' ]
-then
-    python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile ${path2scripts}/bc_celseq2.tsv --cbchd 0 --lenumi 6 --umifirst
-    gzip ${outfq}_cbc.fastq
-elif [ $protocol == 'scscar' ]
-then
-    python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile ${path2scripts}/bc_scarsc.tsv --cbchd 0 --lenumi 3 --umifirst
-    gzip ${outfq}_cbc.fastq
-elif [ $protocol == 'n' ]
-then
-        continue
-else
-    echo 'Protocol [celseq1, celseq2, scscar, n] not specified'
-fi
-
-#### map ####
-if [ $reference == 'human' ]
-then
-    ref=/hpc/tmp/Mauro/refGenomes/hg19/hg19_RefSeq_genes_clean_ERCC92_fl.fa
-    ${path2bwa}/bwa mem -t 8 ${ref} ${outfq}_cbc.fastq.gz > ${outfq}.sam
-elif [ $reference == 'n' ]
-then
-    break
-fi
-
-#### tabulator ####
-python ${path2scripts}/tablator.py ${outfq}.sam
