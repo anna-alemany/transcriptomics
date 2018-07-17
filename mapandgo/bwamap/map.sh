@@ -63,6 +63,7 @@ then
     echo "skip pooling lanes"
 else
     echo 'Pool lanes [y/n] not specified'
+    exit
 fi
 
 #### clean fastq file ####
@@ -80,6 +81,7 @@ then
     echo "skip concatenation to create cbc.fastq file"
 else
     echo 'Protocol [celseq1, celseq2, scscar, n] not specified'
+    exit
 fi
 
 #### map ####
