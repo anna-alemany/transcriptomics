@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 # created: 06-06-2018, Anna Alemany (Avo lab)
 # The script first takes as input the root name of a set of fastq files (R1, R2) and, when required, merges the different lanes.
