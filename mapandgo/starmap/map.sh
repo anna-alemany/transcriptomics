@@ -4,6 +4,7 @@ path2scripts=/hpc/hub_oudenaarden/aalemany/bin/map/starmap
 path2bcfile=/hpc/hub_oudenaarden/aalemany/bin/mapandgo
 path2trimgalore=/hpc/hub_oudenaarden/aalemany/bin/TrimGalore-0.4.3
 path2cutadapt=/hpc/hub_oudenaarden/aalemany/bin/
+path2star=/hpc/hub_oudenaarden/avo/nascent/STAR-2.5.3a/bin/Linux_x86_64
 
 if [ $# -ne 5 ]
 then
@@ -12,6 +13,8 @@ then
     echo "2) pool lanes [y, n]"
     echo "3) protocol [celseq1, celseq2, n]"
     echo "4) trim cbc.fastq file [y, n]"
+    echo "5) reference genome folder [mouse, path, n]"
+    exit
 fi
 
 fq=$1
@@ -19,6 +22,7 @@ outfq=${fq%_*_S*_L*}
 pool=$2
 protocol=$3
 trim=$4
+ref=$5
 
 #### pool lanes ####
 if [ $pool == 'y' ]
@@ -39,13 +43,62 @@ fi
 if [ $protocol == 'celseq1' ]
 then
     python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile ${path2bcfile}/bc_celseq1.tsv --cbchd 0 --lenumi 4
+    gzip ${outfq}_cbc.fastq
 elif [ $protocol == 'celseq2' ]
 then
     python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile ${path2bcfile}/bc_celseq2.tsv --cbchd 0 --lenumi 6 --umifirst
+    gzip ${outfq}_cbc.fastq
 elif [ $protocol == 'n' ]
 then
     echo "skip concatenation to create cbc.fastq file"
 else
     echo "protocol [celseq2, celseq2, n] not specified"
     exit
+fi
+
+#### trim low quality bases ####
+if [ $trim == 'y' ]
+then
+    file2trim=${outfq}_cbc.fastq.gz
+    if [ ! -f ${file2trim} ]
+    then
+        file2trim=${outfq}_cbc.fastq
+    fi
+    if [ ! -f ${file2trim} ]
+    then
+        echo "file to trim (fastq or fastq.gz) not found"
+        exit
+    fi
+    ${path2trimgalore}/trim_galore --path_to_cutadapt ${path2cutadapt}/cutadapt ${file2trim}
+elif [ $tri == 'n' ]
+then
+    echo "skip trimming"
+else
+    echo "trim [y, n] not specified"
+    exit
+fi
+
+#### Map using STAR ####
+file2map=${outfq}_cbc_trimmed.fq.gz
+if [ ! -f ${file2map} ]
+then
+    file2map=${outfq}_cbc_trimmed.fq
+fi
+if [ ! -f ${file2map} ]
+then
+    echo "file to map _cbc_trimmed.fq or _cbc_trimed.fq.gz not found"
+    exit
+else
+    gzip ${file2map}
+    file2map=${outfq}_cbc_trimmed.fq.gz
+fi
+
+if [ $ref == 'mouse' ]
+then
+   ref=/hpc/hub_oudenaarden/avo/nascent/IRFinder-1.2.3/REF/Mouse-mm10-release81/STAR
+fi
+
+if [ $ref != 'n' ]
+then
+    ${path2star}/STAR --genomeLoad NoSharedMemory --runThreadN 12 --genomeDir $ref --outFilterMultimapNmax 1 --outSAMstrandField intronMotif --outFileNamePrefix ${outfq}_star --outSAMunmapped None --outSAMmode Full --outSAMtype BAM SortedByCoordinate --outStd BAM_Unsorted --readFilesIn ${file2map} --readFilesCommand zcat
 fi
