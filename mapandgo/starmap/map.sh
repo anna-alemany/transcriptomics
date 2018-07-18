@@ -100,5 +100,5 @@ fi
 
 if [ $ref != 'n' ]
 then
-    ${path2star}/STAR --genomeLoad NoSharedMemory --runThreadN 12 --genomeDir $ref --outFilterMultimapNmax 1 --outSAMstrandField intronMotif --outFileNamePrefix ${outfq}_star --outSAMunmapped None --outSAMmode Full --outSAMtype BAM SortedByCoordinate --outStd BAM_Unsorted --readFilesIn ${file2map} --readFilesCommand zcat
+    ${path2star}/STAR --runThreadN 12 --genomeDir $ref --readFilesIn ${file2map} --readFilesCommand zcat --outFileNamePrefix ${outfq}_star --outSAMtype BAM Unsorted --outSAMattributes All --outSAMstrandField intronMotif --outFilterMultimapNmax 1 --quantMode TranscriptomeSAM
 fi
