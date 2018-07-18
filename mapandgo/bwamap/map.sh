@@ -85,16 +85,16 @@ else
 fi
 
 #### map ####
-file2map=${outfq}_cbc.fastq.gz
+file2map=${outfq}_cbc*.fastq.gz
 if [ $ref != 'n' ]
 then
     if [ ! -f ${file2map} ]
     then
-        file2map=${outfq}_cbc.fastq
+        file2map=${outfq}_cbc*.fastq
     fi
     if [ ! -f ${file2map} ]
     then
-        echo "cbc.fastq or cbc.fastq.gz does not exist!"
+        echo "cbc*.fastq or cbc*.fastq.gz does not exist!"
         exit
     fi
     ${path2bwa}/bwa mem -t 8 ${ref} ${file2map} > ${outfq}.sam
