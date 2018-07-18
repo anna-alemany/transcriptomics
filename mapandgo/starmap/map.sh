@@ -70,7 +70,8 @@ then
         exit
     fi
     ${path2trimgalore}/trim_galore --path_to_cutadapt ${path2cutadapt}/cutadapt ${file2trim}
-elif [ $tri == 'n' ]
+    mv ${outfq}_cbc_trimmed.fq.gz ${outfq}_cbc_trimmed.fastq.gz
+elif [ $trim == 'n' ]
 then
     echo "skip trimming"
 else
@@ -79,26 +80,31 @@ else
 fi
 
 #### Map using STAR ####
-file2map=${outfq}_cbc_trimmed.fq.gz
+file2map=${outfq}_cbc_trimmed.fastq.gz
 if [ ! -f ${file2map} ]
 then
-    file2map=${outfq}_cbc_trimmed.fq
-fi
-if [ ! -f ${file2map} ]
-then
-    echo "file to map _cbc_trimmed.fq or _cbc_trimed.fq.gz not found"
-    exit
-else
+    file2map=${outfq}_cbc_trimmed.fastq
+    if [ ! -f ${file2map} ]
+    then
+        echo "file to map _cbc_trimmed.fq or _cbc_trimmed.fq.gz not found"
+        exit
+    fi
     gzip ${file2map}
-    file2map=${outfq}_cbc_trimmed.fq.gz
+    file2map=${outfq}_cbc_trimmed.fastq.gz
 fi
 
 if [ $ref == 'mouse' ]
 then
    ref=/hpc/hub_oudenaarden/avo/nascent/IRFinder-1.2.3/REF/Mouse-mm10-release81/STAR
+elif [ $ref == 'human' ]
+then
+    ref=/hpc/hub_oudenaarden/avo/nascent/IRFinder-1.2.3/REF/Human-hg38-release81/STAR
+elif [ $ref == 'zebrafish' ]
+then
+    ref=/hpc/hub_oudenaarden/avo/nascent/IRFinder-1.2.3/REF/Zebrafish-dr10-release91/STAR
 fi
 
 if [ $ref != 'n' ]
 then
-    ${path2star}/STAR --runThreadN 12 --genomeDir $ref --readFilesIn ${file2map} --readFilesCommand zcat --outFileNamePrefix ${outfq}_star --outSAMtype BAM Unsorted --outSAMattributes All --outSAMstrandField intronMotif --outFilterMultimapNmax 1 --quantMode TranscriptomeSAM
+    ${path2star}/STAR --runThreadN 12 --genomeDir $ref --readFilesIn ${file2map} --readFilesCommand zcat --outFileNamePrefix ${outfq}_star --outSAMtype BAM SortedByCoordinate --outSAMattributes All --outSAMstrandField intronMotif --outFilterMultimapNmax 1 --quantMode TranscriptomeSAM
 fi
