@@ -11,7 +11,7 @@ try:
 except:
     sys.exit('Please, give input bamfile')
 
-if not os.path.isfile(inputSamFile):
+if not os.path.isfile(inputBamFile):
     sys.exit('bamfile not found')
 
 bamfile = pysam.AlignmentFile(inputBamFile, 'rb')
