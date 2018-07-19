@@ -14,6 +14,7 @@ then
     echo "3) protocol [celseq1, celseq2, n]"
     echo "4) trim cbc.fastq file [y, n]"
     echo "5) reference genome folder [mouse, path, n]"
+    echo "6) create count tables [y, n]"
     exit
 fi
 
@@ -23,6 +24,7 @@ pool=$2
 protocol=$3
 trim=$4
 ref=$5
+count=$6
 
 #### pool lanes ####
 if [ $pool == 'y' ]
@@ -107,4 +109,12 @@ fi
 if [ $ref != 'n' ]
 then
     ${path2star}/STAR --runThreadN 12 --genomeDir $ref --readFilesIn ${file2map} --readFilesCommand zcat --outFileNamePrefix ${outfq}_star --outSAMtype BAM SortedByCoordinate --outSAMattributes All --outSAMstrandField intronMotif --outFilterMultimapNmax 1 --quantMode TranscriptomeSAM
+fi
+
+rm -r ${outfq}_star_STARtmp
+
+#### Produce count tables ####
+if [ $count == 'y' ]
+then
+    ${path2star}/tablator.py ${outfq}_starAligned.sortedByCoord.out.bam
 fi
