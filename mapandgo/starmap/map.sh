@@ -115,5 +115,5 @@ fi
 #### Produce count tables ####
 if [ $count == 'y' ]
 then
-    ${path2star}/tablator.py ${outfq}_starAligned.sortedByCoord.out.bam
+    ${path2star}/tablator.py ${outfq}_starAligned.toTranscriptome.out.bam
 fi
