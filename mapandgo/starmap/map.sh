@@ -109,9 +109,8 @@ fi
 if [ $ref != 'n' ]
 then
     ${path2star}/STAR --runThreadN 12 --genomeDir $ref --readFilesIn ${file2map} --readFilesCommand zcat --outFileNamePrefix ${outfq}_star --outSAMtype BAM SortedByCoordinate --outSAMattributes All --outSAMstrandField intronMotif --outFilterMultimapNmax 1 --quantMode TranscriptomeSAM
+    rm -r ${outfq}_star_STARtmp
 fi
-
-rm -r ${outfq}_star_STARtmp
 
 #### Produce count tables ####
 if [ $count == 'y' ]
