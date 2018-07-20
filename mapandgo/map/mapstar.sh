@@ -16,13 +16,13 @@ ref=$3
 
 if [ $ref == 'mouse' ]
 then
-   ref=$mousestar
+   ref=/hpc/hub_oudenaarden/avo/nascent/IRFinder-1.2.3/REF/Mouse-mm10-release81/STAR
 elif [ $ref == 'human' ]
 then
-    ref=$humanstar
+    ref=/hpc/hub_oudenaarden/avo/nascent/IRFinder-1.2.3/REF/Human-hg38-release81/STAR
 elif [ $ref == 'zebrafish' ]
 then
-    ref=$zebrafishstar
+    ref=/hpc/hub_oudenaarden/avo/nascent/IRFinder-1.2.3/REF/Zebrafish-dr10-release91/STAR
 fi
 
 ${path2star}/STAR --runThreadN 12 --genomeDir $ref --readFilesIn ${file2map} --readFilesCommand zcat --outFileNamePrefix ${outfq} --outSAMtype BAM SortedByCoordinate --outSAMattributes All --outSAMstrandField intronMotif --outFilterMultimapNmax 1 --quantMode TranscriptomeSAM
