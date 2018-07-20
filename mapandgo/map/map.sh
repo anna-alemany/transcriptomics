@@ -30,7 +30,7 @@ count=$7
 #### pool lanes ####
 if [ $pool == 'y' ]
 then
-    ${path2scripts}/mergeLanes.sh $fq
+    ${path2scripts}/mergeLanes.sh $fq $outfq
 elif [ $pool == 'n' ]
 then
     echo "skip pooling lanes"
