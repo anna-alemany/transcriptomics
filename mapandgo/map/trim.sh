@@ -12,3 +12,4 @@ fi
 file2trim=$1
 
 ${path2trimgalore}/trim_galore --path_to_cutadapt ${path2cutadapt}/cutadapt ${file2trim}
+mv ${file2trim}_trimming_report.txt ${file2trim%.f*}_trimmed_report.txt
