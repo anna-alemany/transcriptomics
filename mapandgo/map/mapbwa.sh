@@ -1,7 +1,7 @@
 #!/bin/bash
 
 path2bwa=/hpc/hub_oudenaarden/bin/software/bwa-0.7.10
-path2samtools=/hpc/hub_oudenaarden/bdebarbanson/bin/samtools-1.3.1/samtools
+path2samtools=/hpc/hub_oudenaarden/bdebarbanson/bin/samtools-1.3.1
 
 if [ $# -ne 3 ]
 then
