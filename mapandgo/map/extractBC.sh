@@ -16,15 +16,15 @@ protocol=$2
 if [ $protocol == 'celseq1' ]
 then
     python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile ${path2scripts}/bc_celseq1.tsv --cbchd 0 --lenumi 4
-    gzip ${outfq}_cbc.fastq.gz
+    gzip ${outfq}_cbc.fastq
 elif [ $protocol == 'celseq2' ]
 then
     python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile ${path2scripts}/bc_celseq2.tsv --cbchd 0 --lenumi 6 --umifirst
-    gzip ${outfq}_cbc.fastq.gz
+    gzip ${outfq}_cbc.fastq
 elif [ $protocol == 'scscar' ]
 then
     python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile ${path2scripts}/bc_scarsc.tsv --cbchd 0 --lenumi 3 --umifirst
-    gzip ${outfq}_cbc.fastq.gz
+    gzip ${outfq}_cbc.fastq
 else
     echo "unknown protocol [celseq1, celseq2, scscar]"
     exit
