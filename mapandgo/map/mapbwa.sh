@@ -17,19 +17,19 @@ ref=$3
 
 if [ $ref == 'mouse' ]
 then
-    mousebwa=/hpc/hub_oudenaarden/gene_models/mouse_gene_models/mm10_eGFP_mito/mm10_RefSeq_genes_clean_ERCC92_polyA_10_masked_eGFP_Mito.fa
+    ref=/hpc/hub_oudenaarden/gene_models/mouse_gene_models/mm10_eGFP_mito/mm10_RefSeq_genes_clean_ERCC92_polyA_10_masked_eGFP_Mito.fa
 elif [ $ref == 'human' ]
 then
-    humanbwa=/hpc/hub_oudenaarden/gene_models/human_gene_models/hg19_mito/hg19_RefSeq_genes_clean_ERCC92_polyA_10_masked_Mito.fa
+    ref=/hpc/hub_oudenaarden/gene_models/human_gene_models/hg19_mito/hg19_RefSeq_genes_clean_ERCC92_polyA_10_masked_Mito.fa
 elif [ $ref == 'elegans' ] 
 then
-    elegansbwa=/hpc/hub_oudenaarden/gene_models/cel_gene_models/Aggregate_1003_genes_sorted_oriented_ERCC92.fa
+    ref=/hpc/hub_oudenaarden/gene_models/cel_gene_models/Aggregate_1003_genes_sorted_oriented_ERCC92.fa
 elif [ $ref == 'zebrafish' ]
 then
-    zebrafishbwa=/hpc/hub_oudenaarden/abarve/genomes/Danio_rerio_Zv9_ens74_extended3_genes_ERCC92_GFPmod_geneids.fa
+    ref=/hpc/hub_oudenaarden/abarve/genomes/Danio_rerio_Zv9_ens74_extended3_genes_ERCC92_GFPmod_geneids.fa
 elif [ $ref == 'GFP' ]
 then
-    GFPbwa=/hpc/hub_oudenaarden/gene_models/zebrafish_gene_models/danRer10_clean.fa
+    ref=/hpc/hub_oudenaarden/gene_models/zebrafish_gene_models/danRer10_clean.fa
 fi
 
 ${path2bwa}/bwa mem -t 8 ${ref} ${file2map} > ${outfq}.sam
