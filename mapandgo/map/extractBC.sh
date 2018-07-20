@@ -1,6 +1,6 @@
 #!/bin/bash
 
-path2scripts=/hpc/hub_oudenaarden/aalemany/bin/mapandgo
+path2scripts=/hpc/hub_oudenaarden/aalemany/bin/mapandgo2
 
 if [ $# -ne 2 ]
 then
