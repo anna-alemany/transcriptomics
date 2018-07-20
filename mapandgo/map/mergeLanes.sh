@@ -3,6 +3,7 @@
 if [ $# -ne 1 ]
 then
   echo "Please, give root to fastq files"
+  exit
 fi
 
 fq=$1
