@@ -15,4 +15,16 @@ def downsample(df, n):
 
 def filterGenes(df, ncell, minexpr):
     return df.loc[df.index[(((df>minexpr)*df)>0).sum(axis=1)>=ncell]]
+
+def selectGenesbyCV(df, n):
+    cvdf = pd.DataFrame({'mu': df.mean(axis=1), 'cv': df.std(axis=1)/df.mean(axis=1)})
+    a = True
+    Ct = 1e3
+    while a:
+        gs = cvdf.index[Ct/np.sqrt(cvdf['mu']) < cvdf['cv']]
+        if len(gs) < n:
+            Ct = Ct-0.1
+        else:
+            a = False
+    return gs  
     
