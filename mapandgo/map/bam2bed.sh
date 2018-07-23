@@ -10,7 +10,7 @@ then
     exit
 fi
 
-${path2bedtools}/bin/bamToBed -i $1 -split | awk -F '\t|:' '{col=NF; cell=col-2; umi=col-4; print $0"\t"$cell"\t"$umi}' > $2
+${path2bedtools}/bamToBed -i $1 -split | awk -F '\t|:' '{col=NF; cell=col-2; umi=col-4; print $0"\t"$cell"\t"$umi}' > $2
 
 
 
