@@ -2,7 +2,7 @@
 
 path2bedtools=/hpc/hub_oudenaarden/avo/bin/bedtools2/bin/
 
-if [ $# -n 1 ]
+if [ $# -ne 1 ]
 then
     echo "Please, give:"
     echo "1) input bam file"
