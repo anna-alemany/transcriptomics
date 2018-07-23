@@ -1,0 +1,14 @@
+#!/bin/bash
+
+path2bedtools=/hpc/hub_oudenaarden/avo/bin/bedtools2/bin/
+
+if [ $# -n 1 ]
+then
+    echo "Please, give:"
+    echo "1) input bam file"
+    exit
+fi
+
+${path2bedtools}/bin/bamToBed -i $1 -split | awk -F '\t|:' '{col=NF; cell=col-2; umi=col-4; print $0"\t"$cell"\t"$umi}' > ${1%.bam}.bed
+
+
