@@ -24,8 +24,22 @@ for c in ats:
 del df['attribute']
 
 ### extract introns ###
-for idx in xdf['transcript']:
-    
+### extract introns ###
+idf = pd.DataFrame(columns = ['chr','start','end','strand','gene_name'])
+ni = 0
+for idx in xdf['transcript'].index:
+    x0, x1, transID = xdf['transcript'].loc[idx, ['start','end','transcript_id']]
+    for i in xdf['exon'][xdf['exon']['transcript_id']==transID].index:
+        xa, xb = xdf['exon'].loc[2,['start','end']]
+        if xa > x0:
+            ni += 1
+            chrm, strand, genename = xdf['exon'].loc[i, ['seqname','strand','gene_name']]
+            idf.loc[ni] = [chrm, x0, xa-1, strand, genename]
+        x0 = xb
+    if x0 < x1:
+        ni += 1
+        chrm, strand, genename = xdf['exon'].loc[i, ['seqname','strand','gene_name']]
+        idf.loc[ni] = [chrm, x0, xa-1, strand, genename]    
     
     
     
