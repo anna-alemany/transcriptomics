@@ -5,27 +5,28 @@ path2scripts=/hpc/hub_oudenaarden/aalemany/bin/mapandgo
 
 #### read input parameters ####
 
-if [ $# -ne 7 ]
+if [ $# -ne 8 ]
 then
     echo "Please, give the following inputs in this order"
     echo "1) library name (name until 1_R*_001.fastq.gz)"
-    echo "2) pool lanes [y, n]"
-    echo "3) protocol: celseq1, celseq2, scscar, n [to skip concatenator step]"
-    echo "4) trim cbc.fastq.gz file [y, n]"
-    echo "5) mapping software [bwa, star]" 
-    echo "6) reference genome [mouse, human, elegans, briggsae, zebrafish, GFP, full path for others, n for non (skip mapping)]"
-    echo "7) create count tables [y, n]"
+    echo "2) output root name (no extensions)"
+    echo "3) pool lanes [y, n]"
+    echo "4) protocol: celseq1, celseq2, scscar, n [to skip concatenator step]"
+    echo "5) trim cbc.fastq.gz file [y, n]"
+    echo "6) mapping software [bwa, star]" 
+    echo "7) reference genome [mouse, human, elegans, briggsae, zebrafish, GFP, full path for others, n for non (skip mapping)]"
+    echo "8) create count tables [y, n]"
     exit
 fi
 
 fq=$1
-outfq=${fq%_*_S*_L*}
-pool=$2
-protocol=$3
-trim=$4
-soft=$5
-ref=$6
-count=$7
+outfq=$2
+pool=$3
+protocol=$4
+trim=$5
+soft=$6
+ref=$7
+count=$8
 
 #### pool lanes ####
 if [ $pool == 'y' ]
@@ -42,6 +43,7 @@ fi
 if [ $protocol =! 'n' ]
 then
     ${path2scripts}/extractBC.sh ${outfq} ${protocol}
+    gzip ${outfq}_cbc.fastq
 elif [ $protocol == 'n' ]
 then
     echo "skip concatenation to create cbc.fastq file"
