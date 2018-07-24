@@ -25,10 +25,10 @@ del df['attribute']
 
 #### extract exons ####
 xdf = {ch: df_ch for ch, df_ch in df.groupby('feature')}
-exondf = df.groupby('feature')['exon']
+allexondf = df.groupby('feature')['exon']
 
 edf = allexondf.groupby(['seqname','start','end','strand','gene_name'])
 edf2 = pd.DataFrame(edf.groups.keys(), columns=['chr','start','end','strand','gene_name'])
-edf2 = edf2.sort_values(by='chr')
+edf2 = edf2.sort_values(by=['chr','start'])
 
 edf2.to_csv(outptufile, sep = '\t', index = None, header = None)
