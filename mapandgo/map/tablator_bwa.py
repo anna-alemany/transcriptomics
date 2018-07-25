@@ -24,7 +24,7 @@ for r in bamfile.fetch(until_eof = True):
     if not r.is_unmapped and r.mapq > 20 and 'XA' not in tags and 'SA' not in tags:
        gene = genelist[r.rname]
        umi = r.qname.rsplit(':')[-3]
-       cell = read.qname.rsplit(':')[-1]
+       cell = r.qname.rsplit(':')[-1]
        try:
            cnt[cell][gene].update([umi])
        except:
