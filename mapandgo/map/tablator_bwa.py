@@ -19,7 +19,7 @@ genelist =  [d['SN'] for d in bamfile.header['SQ']]
 
 ### Count ####
 cnt = {}
-for r in bamfile.fetch(until_eof = True):
+for idx, r in enumerate(bamfile.fetch(until_eof = True)):
     tags = [x[0] for x in r.get_tags()]
     if not r.is_unmapped and r.mapq > 20 and 'XA' not in tags and 'SA' not in tags:
        gene = genelist[r.rname]
@@ -54,7 +54,7 @@ cdf.index.name = 'GENEID'
 bdf.index.name = 'GENEID'
 tdf.index.name = 'GENEID'
 
-ftrunk = inputSamFile[:-4]
+ftrunk = inputBamFile[:-4]
 
 cdf.to_csv(ftrunk + '.coutc.tsv', sep = '\t')
 bdf.to_csv(ftrunk + '.coutb.tsv', sep = '\t')
