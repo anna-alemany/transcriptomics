@@ -25,7 +25,7 @@ del df['attribute']
 
 #### extract exons ####
 xdf = {ch: df_ch for ch, df_ch in df.groupby('feature')}
-allexondf = df.groupby('feature')['exon']
+allexondf = xdf['exon']
 
 edf = allexondf.groupby(['seqname','start','end','strand','gene_name'])
 edf2 = pd.DataFrame(edf.groups.keys(), columns=['chr','start','end','strand','gene_name'])
