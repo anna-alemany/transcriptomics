@@ -41,5 +41,8 @@ for idx in xdf['transcript'].index:
         chrm, strand, genename = xdf['exon'].loc[i, ['seqname','strand','gene_name']]
         idf.loc[ni] = [chrm, x0, xa-1, strand, genename]    
     
-    
-    
+edf = idf.groupby(['seqname','start','end','strand','gene_name'])
+edf2 = pd.DataFrame(edf.groups.keys(), columns=['chr','start','end','strand','gene_name'])
+edf2 = edf2.sort_values(by=['chr','start'])
+
+edf2.to_csv(outptufile, sep = '\t', index = None, header = None)
