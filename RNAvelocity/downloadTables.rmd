@@ -1,3 +1,5 @@
+## Explanation found in https://www.biostars.org/p/13290/ 
+
 Following is a set of detailed instructions on how to get a BED file of all introns from the UCSC table browser. Note that most of the following options will be set by default. So the number of steps required is not as bad as it seems
 
 * Go to the UCSC table browser.
