@@ -26,9 +26,3 @@ You will get output that looks like this for every UCSC gene:
 | chr3  |  124457086  |  124458870  |  uc003ehl.3_intron_2_0_chr3_124457087_f |   0  |  + |
 | chr3  |  124459046  |  124460998  |  uc003ehl.3_intron_3_0_chr3_124459047_f |   0  |  + |
 | chr3  |  124461113  |  124462761  |  uc003ehl.3_intron_4_0_chr3_124461114_f |   0  |  + |
-
-
-| First Header  | Second Header |
-| ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
