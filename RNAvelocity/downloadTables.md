@@ -19,6 +19,8 @@ Following is a set of detailed instructions on how to get a BED file of all intr
 
 You will get output that looks like this for every UCSC gene:
 
+| chromosome | start | end | gene_name | strand | strand |
+| ---------- | ----- | --- | --------- | ------ | ------ |
 | chr3  |  124449474  |  124453939  |  uc003ehl.3_intron_0_0_chr3_124449475_f |   0  |  + |
 | chr3  |  124454093  |  124456414  |  uc003ehl.3_intron_1_0_chr3_124454094_f |   0  |  + |
 | chr3  |  124457086  |  124458870  |  uc003ehl.3_intron_2_0_chr3_124457087_f |   0  |  + |
