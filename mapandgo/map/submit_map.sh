@@ -12,4 +12,4 @@ then
     exit
 fi
 
-echo "/hpc/hub_oudenaarden/aalemany/bin/mapandgo2/bmap.sh $1" | qsub -cwd -N map-$1 -o map-${1}.out -e map-${1}.err -m eas -M ${email} -pe threaded ${threads} -l h_rt=${Dt} -l h_vmem=${Dmem}
+echo "/hpc/hub_oudenaarden/aalemany/bin/mapandgo2/map.sh $1" | qsub -cwd -N map-$1 -o map-${1}.out -e map-${1}.err -m eas -M ${email} -pe threaded ${threads} -l h_rt=${Dt} -l h_vmem=${Dmem}
