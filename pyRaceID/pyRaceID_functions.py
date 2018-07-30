@@ -1,6 +1,13 @@
 import numpy as np
 import pandas as pd
 from collections import Counter
+# glossary of functions #
+# 1) filterCells
+# 2) downsample
+# 3) filterGenes
+# 4) selectGenesbyCV
+# 5) findGeneInDataFrame
+
 
 def filterCells(df, n):
     return df[df.columns[df.sum()>n]]
@@ -32,3 +39,6 @@ def selectGenesbyCV(df, n):
             a = False
     return gs  
     
+def findGeneInDataFrame(g, df):
+    x = [idx for idx in df.index if g in idx]
+    return x
