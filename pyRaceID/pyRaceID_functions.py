@@ -7,6 +7,10 @@ def filterCells(df, n):
 
 def downsample(df, n):
     df = df.round().astype(int)
+    try:
+        n = int(n)
+    except:
+        return "ERR: downsampling parameter needs to be a number"
     ddf = pd.DataFrame({c: Counter(np.random.choice([i for i in Counter(dict(df[c])).elements()], size=n, replace=False)) for c in df.columns})
     ddf = ddf.fillna(0)
     ddf = ddf.loc[ddf.sum(axis=1).sort_values(ascending=False).index]
