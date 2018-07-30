@@ -42,3 +42,22 @@ def selectGenesbyCV(df, n):
 def findGeneInDataFrame(g, df):
     x = [idx for idx in df.index if g in idx]
     return x
+
+def findCorrGenes(df, g):
+    gene = [idx for idx in df.index if g in idx]
+    df = df.T
+    if len(gene) == 0:
+        print 'gene not found'
+        return
+    elif len(gene) > 1:
+        print gene
+        print 'Please, be more specific'
+        return
+    elif len(gene) == 1:
+        gene = gene[0]
+        cdf = pd.DataFrame(columns = [gene + '-Pearson', gene + '-Spearman'])
+        for col in df.columns:
+            if df[col].sum() > 0:
+                cdf.loc[col] = [df[[col, gene]].corr().iloc[0,1], df[[col, gene]].corr
+    cdf = cdf.sort_values(by = cdf.columns[0], ascending = False)
+    return cdf
