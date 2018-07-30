@@ -58,6 +58,6 @@ def findCorrGenes(df, g):
         cdf = pd.DataFrame(columns = [gene + '-Pearson', gene + '-Spearman'])
         for col in df.columns:
             if df[col].sum() > 0:
-                cdf.loc[col] = [df[[col, gene]].corr().iloc[0,1], df[[col, gene]].corr
+                cdf.loc[col] = [df[[col, gene]].corr().iloc[0,1], df[[col, gene]].corr('spearman').iloc[0,1]]
     cdf = cdf.sort_values(by = cdf.columns[0], ascending = False)
     return cdf
