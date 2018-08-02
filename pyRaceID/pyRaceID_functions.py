@@ -12,16 +12,21 @@ from collections import Counter
 def filterCells(df, n):
     return df[df.columns[df.sum()>n]]
 
-def downsample(df, n):
+def downsample(df, n, DS = 1, seed = 12345):
+    np.random.seed(seed)
     df = df.round().astype(int)
     try:
         n = int(n)
     except:
-        return "ERR: downsampling parameter needs to be a number"
-    ddf = pd.DataFrame({c: Counter(np.random.choice([i for i in Counter(dict(df[c])).elements()], size=n, replace=False)) for c in df.columns})
-    ddf = ddf.fillna(0)
-    ddf = ddf.loc[ddf.sum(axis=1).sort_values(ascending=False).index]
-    ddf = ddf.astype(int)
+        return 'ERR: Downsampling parameter needs to be integer' 
+    if df.sum() < n:
+        return "ERR: Please, decrease downsampling size"
+    ddf = [0 for i in range(DS)]
+    for i in range(DS):
+        ddf[i] = pd.DataFrame({c: Counter(np.random.choice([i for i in Counter(dict(df[c])).elements()], size=n, replace=False)) for c in df.columns})
+        ddf[i] = ddf[i].fillna(0)
+        ddf[i] = ddf[i].loc[ddf[i].sum(axis=1).sort_values(ascending=False).index]
+        ddf[i] = ddf[i].astype(int)
     return ddf
 
 def filterGenes(df, ncell, minexpr):
