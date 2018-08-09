@@ -27,6 +27,8 @@ def downsample(df, n, DS = 1, seed = 12345):
         ddf[i] = ddf[i].fillna(0)
         ddf[i] = ddf[i].loc[ddf[i].sum(axis=1).sort_values(ascending=False).index]
         ddf[i] = ddf[i].astype(int)
+    if DS == 1:
+        ddf = ddf[0]
     return ddf
 
 def filterGenes(df, ncell, minexpr):
