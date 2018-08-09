@@ -1,16 +1,26 @@
 import numpy as np
 import pandas as pd
 from collections import Counter
-# glossary of functions #
-# 1) filterCells
-# 2) downsample
-# 3) filterGenes
-# 4) selectGenesbyCV
-# 5) findGeneInDataFrame
+from scipy.stats import binom
 
+# glossary of functions #
+# filterCells
+# zscore
+# downsample
+# filterGenes
+# selectGenesbyCV
+# findGeneInDataFrame
+# findCorrGenes
+# diffgeneexpr
 
 def filterCells(df, n):
     return df[df.columns[df.sum()>n]]
+
+def zscore(df):
+    zdf = df.T
+    zdf = (zdf-zdf.mean())/zdf.std()
+    zdf = zdf.T
+    return zdf
 
 def downsample(df, n, DS = 1, seed = 12345):
     np.random.seed(seed)
@@ -68,3 +78,17 @@ def findCorrGenes(df, g):
                 cdf.loc[col] = [df[[col, gene]].corr().iloc[0,1], df[[col, gene]].corr('spearman').iloc[0,1]]
     cdf = cdf.sort_values(by = cdf.columns[0], ascending = False)
     return cdf
+
+def diffgeneexpr(ndata, names1, names2, label1='mean1', label2='mean2', pvalmax = 0.01):
+    mean1 = ndata[names1].sum(axis=1)
+    mean1[mean1==0] = mean1[mean1>0].min()/10.
+    mean2 = ndata[names2].sum(axis=1)
+    mean2[mean2==0] = mean2[mean2>0].min()/10.
+    trials = int(round(mean1.sum()))
+    probs = mean2/mean2.sum()
+    pval = binom(trials, probs).cdf(mean1)
+    pval = [i if i <= 0.5 else 1-i for i in pval]
+    dge = pd.DataFrame({'pval': pval, label1: mean1, label2: mean2})
+    dge['fc'] = dge[label1]/dge[label2]
+    dge = dge[dge['pval'] <= pvalmax]
+    return dge.sort_values('fc', ascending=False)
