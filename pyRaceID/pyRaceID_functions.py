@@ -19,7 +19,7 @@ def downsample(df, n, DS = 1, seed = 12345):
         n = int(n)
     except:
         return 'ERR: Downsampling parameter needs to be integer' 
-    if df.sum() < n:
+    if any(df.sum() < n):
         return "ERR: Please, decrease downsampling size"
     ddf = [0 for i in range(DS)]
     for i in range(DS):
