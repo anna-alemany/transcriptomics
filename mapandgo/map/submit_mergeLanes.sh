@@ -3,7 +3,7 @@
 email=a.alemany@hubrecht.eu
 Dt=15:00:00
 Dmem=10G
-threads=1
+threads=2
 
 if [ $# -ne 2 ]
 then
