@@ -6,7 +6,7 @@ if [ $# -ne 2 ]
 then
     echo "Please, give: "
     echo "1) input root to fastq files"
-    echo "2) protocol [celseq1, celseq2, scscar]"
+    echo "2) protocol [celseq1, celseq2, nla, scscar]"
     exit
 fi
 
@@ -25,7 +25,11 @@ elif [ $protocol == 'scscar' ]
 then
     python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile ${path2scripts}/bc_scarsc.tsv --cbchd 0 --lenumi 3 --umifirst
     gzip ${outfq}_cbc.fastq
+elif [ $protocol == 'nla' ]
+then
+    python ${path2scripts}/concatenator.py --fqf ${outfq} --cbcfile ${path2scripts}/bc_nla.tsv --cbchd 0 --lenumi 3 
+    gzip ${outfq}_cbc.fastq
 else
-    echo "unknown protocol [celseq1, celseq2, scscar]"
+    echo "unknown protocol [celseq1, celseq2, nla, scscar]"
     exit
 fi
