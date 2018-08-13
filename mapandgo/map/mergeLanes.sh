@@ -13,5 +13,4 @@ zcat ${fq}*R2* > ${outfq}_R2.fastq &
 wait
 
 gzip ${outfq}_R1.fastq &
-gzip ${outfq}_R2.fastq &
-wait
+gzip ${outfq}_R2.fastq
