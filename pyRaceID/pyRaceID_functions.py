@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from collections import Counter
 from scipy.stats import binom
+from scipy.cluster.hierarchy import dendrogram, linkage
 
 # glossary of functions #
 # filterCells
@@ -92,3 +93,9 @@ def diffgeneexpr(ndata, names1, names2, label1='mean1', label2='mean2', pvalmax 
     dge['fc'] = dge[label1]/dge[label2]
     dge = dge[dge['pval'] <= pvalmax]
     return dge.sort_values('fc', ascending=False)
+
+def hierarchicalClustering(df):
+    Z = linkage(ddf.loc[selectG], method='ward')
+    dg = dendrogram(Z, no_labels=True, color_threshold=100)
+    plt.show()
+    return Z, dg
