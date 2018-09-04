@@ -21,7 +21,7 @@ genelist =  [d['SN'] for d in bamfile.header['SQ']]
 cnt = {}
 for idx, r in enumerate(bamfile.fetch(until_eof = True)):
     tags = [x[0] for x in r.get_tags()]
-    if not r.is_unmapped and r.mapq > 20 and 'XA' not in tags and 'SA' not in tags:
+    if not r.is_unmapped and r.mapq > 20 and 'XA' not in tags and 'SA' not in tags and not r.is_reverse:
        gene = genelist[r.rname]
        umi = r.qname.rsplit(':')[-3]
        cell = r.qname.rsplit(':')[-1]
