@@ -3,6 +3,7 @@ import pandas as pd
 from collections import Counter
 from scipy.stats import binom
 from scipy.cluster.hierarchy import dendrogram, linkage
+from multiprocessing import Pool
 
 # glossary of functions #
 # filterCells
@@ -22,6 +23,22 @@ def zscore(df):
     zdf = (zdf-zdf.mean())/zdf.std()
     zdf = zdf.T
     return zdf
+
+def downsample_p(fmdf):
+    def dwn(x):
+        c, v, n = x
+        v = v.astype(int)
+        cnt = Counter(np.random.choice([i for i in Counter(dict(v)).elements()], size=n, replace=False))
+        return c, cnt
+
+    p = Pool(8)
+
+    xdf = {c: Counter() for c in fmdf.columns[:5]}
+    for c, cnt in p.imap_unordered(dwn, [(c, fmdf[c], 500) for c in xdf]):
+        xdf[c] = cnt
+
+    xdf = pd.DataFrame(xdf)
+    return xdf
 
 def downsample(df, n, DS = 1, seed = 12345):
     np.random.seed(seed)
