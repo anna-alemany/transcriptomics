@@ -8,7 +8,7 @@ from multiprocessing import Pool
 # glossary of functions #
 # filterCells
 # zscore
-# downsample
+# downsample /  downsample_p
 # filterGenes
 # selectGenesbyCV
 # findGeneInDataFrame
@@ -24,20 +24,21 @@ def zscore(df):
     zdf = zdf.T
     return zdf
 
-def downsample_p(fmdf):
-    def dwn(x):
-        c, v, n = x
-        v = v.astype(int)
-        cnt = Counter(np.random.choice([i for i in Counter(dict(v)).elements()], size=n, replace=False))
-        return c, cnt
+def dwn_p(x):
+    c, v, n = x
+    v = v.astype(int)
+    cnt = Counter(np.random.choice([i for i in Counter(dict(v)).elements()], size=n, replace=False))
+    return c, cnt
 
+def downsample_p(fmdf, n):
     p = Pool(8)
 
-    xdf = {c: Counter() for c in fmdf.columns[:5]}
-    for c, cnt in p.imap_unordered(dwn, [(c, fmdf[c], 500) for c in xdf]):
+    xdf = {c: Counter() for c in fmdf.columns}
+    for c, cnt in p.imap_unordered(dwn_p, [(c, fmdf[c], 500) for c in xdf]):
         xdf[c] = cnt
 
     xdf = pd.DataFrame(xdf)
+    xdf = xdf.fillna(0)
     return xdf
 
 def downsample(df, n, DS = 1, seed = 12345):
