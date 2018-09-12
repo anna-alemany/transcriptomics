@@ -80,7 +80,12 @@ def comtsneprecomputed(cdf, rndstate):
     tsne = TSNE(n_jobs=12, metric='precomputed', random_state=rndstate, early_exaggeration = 50) #312
     Y = tsne.fit_transform(cdf)
     return pd.DataFrame({'V1': [y[0] for y in Y], 'V2': [y[1] for y in Y]}, index=cdf.columns)
-    
+
+def clusteringAgg(fdmdf, ncl):
+    cl = cluster.AgglomerativeClustering(n_clusters=ncl).fit(fdmdf.T)
+    hcl = pd.DataFrame({'cluster': cl.labels_, 'cells': dmdf.columns})
+    return hcl.sort_values(by='cluster')
+
 def findGeneInDataFrame(g, df):
     x = [idx for idx in df.index if g in idx]
     return x
