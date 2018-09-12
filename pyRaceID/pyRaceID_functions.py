@@ -4,6 +4,7 @@ from collections import Counter
 from scipy.stats import binom
 from scipy.cluster.hierarchy import dendrogram, linkage
 from multiprocessing import Pool
+from MulticoreTSNE import MulticoreTSNE as TSNE
 
 # glossary of functions #
 # filterCells
@@ -74,6 +75,11 @@ def selectGenesbyCV(df, n):
         else:
             a = False
     return gs  
+    
+def comtsneprecomputed(cdf, rndstate):
+    tsne = TSNE(n_jobs=12, metric='precomputed', random_state=rndstate, early_exaggeration = 50) #312
+    Y = tsne.fit_transform(cdf)
+    return pd.DataFrame({'V1': [y[0] for y in Y], 'V2': [y[1] for y in Y]}, index=cdf.columns)
     
 def findGeneInDataFrame(g, df):
     x = [idx for idx in df.index if g in idx]
