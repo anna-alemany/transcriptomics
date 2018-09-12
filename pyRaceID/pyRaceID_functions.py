@@ -5,6 +5,7 @@ from scipy.stats import binom
 from scipy.cluster.hierarchy import dendrogram, linkage
 from multiprocessing import Pool
 from MulticoreTSNE import MulticoreTSNE as TSNE
+import sklearn.cluster as cluster
 
 # glossary of functions #
 # filterCells
