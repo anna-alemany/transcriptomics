@@ -35,8 +35,13 @@ def dwn_p(x):
 def downsample_p(fmdf, n):
     p = Pool(8)
 
+    try:
+        n = int(n)
+    except:
+        return 'ERR: downsampling n parameter needs to be integer'
+    
     xdf = {c: Counter() for c in fmdf.columns}
-    for c, cnt in p.imap_unordered(dwn_p, [(c, fmdf[c], 500) for c in xdf]):
+    for c, cnt in p.imap_unordered(dwn_p, [(c, fmdf[c], n) for c in xdf]):
         xdf[c] = cnt
 
     xdf = pd.DataFrame(xdf)
