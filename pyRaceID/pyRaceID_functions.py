@@ -71,6 +71,7 @@ def filterGenes(df, ncell, minexpr):
     return df.loc[df.index[(((df>minexpr)*df)>0).sum(axis=1)>=ncell]]
 
 def vargenes(df, n):
+    df = df.loc[df.index[df.sum(axis=1)!=0]]
     cvdf = pd.DataFrame({'mu': df.mean(axis=1), 'var': df.var(axis=1)})
     cvdf['cv'] = np.sqrt(cvdf['var'])/cvdf['mu']
     cvdf['r'] = np.log10(cvdf['mu'])
