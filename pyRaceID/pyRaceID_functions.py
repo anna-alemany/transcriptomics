@@ -70,17 +70,17 @@ def downsample(df, n, DS = 1, seed = 12345):
 def filterGenes(df, ncell, minexpr):
     return df.loc[df.index[(((df>minexpr)*df)>0).sum(axis=1)>=ncell]]
 
-def selectGenesbyCV(df, n):
-    cvdf = pd.DataFrame({'mu': df.mean(axis=1), 'cv': df.std(axis=1)/df.mean(axis=1)})
-    a = True
-    Ct = 1e3
-    while a:
-        gs = cvdf.index[Ct/np.sqrt(cvdf['mu']) < cvdf['cv']]
-        if len(gs) < n:
-            Ct = Ct-0.1
-        else:
-            a = False
-    return gs  
+def vargenes(df, n):
+    cvdf = pd.DataFrame({'mu': df.mean(axis=1), 'var': df.var(axis=1)})
+    cvdf['cv'] = np.sqrt(cvdf['var'])/cvdf['mu']
+    cvdf['r'] = np.log10(cvdf['mu'])
+    cvdf['s'] = np.log10(cvdf['cv'])
+    a = -0.5; b = 0 # straight line for poisson cv
+    cvdf['xmin'] = (a*cvdf['s']-a*b-cvdf['r'])/(a**2-1)
+    cvdf['ymin'] = a*cvdf['xmin'] + b
+    cvdf['dist'] = np.sqrt((cvdf['r']-cvdf['xmin'])**2+(cvdf['s']-cvdf['ymin'])**2)
+    cvdf = cvdf.sort_values(by='dist', ascending = False)
+    return cvdf.index[:n]
     
 def comtsneprecomputed(cdf, rndstate):
     tsne = TSNE(n_jobs=12, metric='precomputed', random_state=rndstate, early_exaggeration = 50) #312
