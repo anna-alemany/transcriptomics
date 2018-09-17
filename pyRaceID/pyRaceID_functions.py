@@ -135,3 +135,24 @@ def hierarchicalClustering(df):
     dg = dendrogram(Z, no_labels=True, color_threshold=100)
     plt.show()
     return Z, dg
+
+def getClusterByColor(dg, labels):
+      kk = []
+      ii = 0
+      cluster = 0
+      color = dg['color_list'][0]
+      clusters = {cluster: []}
+      for i in range(len(dg['icoord'])):
+          v = dg['icoord'][i]
+          for j in [0,2]:
+              vj = int(round((v[j]-5.)/10))
+              if (v[j]-5.)/10 == vj and vj not in kk:
+                  kk.append(vj)
+                  if dg['color_list'][i] == color:
+                      clusters[cluster].append(labels[dg['leaves'][vj]])
+                  else:
+                      color = dg['color_list'][i]
+                      cluster += 1
+                      clusters[cluster] = [labels[dg['leaves'][vj]]]
+        return clusters
+          
