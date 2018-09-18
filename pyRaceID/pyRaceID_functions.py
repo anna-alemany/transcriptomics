@@ -132,7 +132,7 @@ def diffgeneexpr(ndata, names1, names2, label1='mean1', label2='mean2', pvalmax 
 
 def hierarchicalClustering(df):
     Z = linkage(df.loc[selectG], method='ward')
-    dg = dendrogram(Z, no_labels=True, color_threshold=100)
+    dg = dendrogram(Z, no_labels=True, color_threshold=100, no_plot = True)
     plt.show()
     return Z, dg
 
