@@ -72,5 +72,4 @@ p = Pool(8)
 for dd in p.imap_unordered(findShortPathAStar_p, [(x0,x1,Mnngraph,MpairDist) for x0,x1 in it.product(Mnngraph.columns,Mnngraph.columns)]):
     x0 = int(dd.name.rsplit('-')[0])
     x1 = int(dd.name.rsplit('-')[-1])
-    print x0, x1
     Dphys.loc[x0, x1] = dd['w']
