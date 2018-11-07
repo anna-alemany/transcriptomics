@@ -1,17 +1,30 @@
 Map transcriptome data with star. 
 Get a table of unspliced and spliced transcripts.
 
+Let's assume we start with the following fastq files:
+
+* MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_AH2FMNBGX9_S1_L001_R1_001.fastq.gz
+* MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_AH2FMNBGX9_S1_L001_R2_001.fastq.gz
+* MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_AH2FMNBGX9_S1_L002_R1_001.fastq.gz
+* MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_AH2FMNBGX9_S1_L002_R2_001.fastq.gz
+* MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_AH2FMNBGX9_S1_L003_R1_001.fastq.gz
+* MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_AH2FMNBGX9_S1_L003_R2_001.fastq.gz
+* MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_AH2FMNBGX9_S1_L004_R1_001.fastq.gz
+* MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_AH2FMNBGX9_S1_L004_R2_001.fastq.gz
+
 # Steps
 
 1. Merge lanes
 ```{bash}
-submit_mergeLanes.sh MB-2-gastruloid-plateG-C5-transcriptome-FACS0108_AH2FMNBGX9_S2_L00 MB-2-gastruloid-plateG-C5-transcriptome-FACS0108
+submit_mergeLanes.sh MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_AH2FMNBGX9_S1_L00 MB-2-gastruloid-plateF-C5-transcriptome-FACS0108
 ```
+This will produce two new fastq files, named _MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_R1.fastq.gz_ and _MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_R2.fastq.gz_, which contain all the merged reads from R1 and R2 fastq files, respectively. You can keep these and remove all the initial fastq files. 
 
 2. Demultiplex reads
 ```{bash}
 submit_extractBC.sh MB-2-gastruloid-plateG-C5-transcriptome-FACS0108 celseq2
 ```
+Here we filter out reads that do not have a celseq2 barcode. We produce a new fastq file 
 
 3. Trim data
 ```{bash}
