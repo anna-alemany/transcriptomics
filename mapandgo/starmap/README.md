@@ -3,33 +3,38 @@ Get a table of unspliced and spliced transcripts.
 
 Let's assume we start with the following fastq files:
 
-* MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_AH2FMNBGX9_S1_L001_R1_001.fastq.gz
-* MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_AH2FMNBGX9_S1_L001_R2_001.fastq.gz
-* MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_AH2FMNBGX9_S1_L002_R1_001.fastq.gz
-* MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_AH2FMNBGX9_S1_L002_R2_001.fastq.gz
-* MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_AH2FMNBGX9_S1_L003_R1_001.fastq.gz
-* MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_AH2FMNBGX9_S1_L003_R2_001.fastq.gz
-* MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_AH2FMNBGX9_S1_L004_R1_001.fastq.gz
-* MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_AH2FMNBGX9_S1_L004_R2_001.fastq.gz
+* library_L001_R1_001.fastq.gz
+* library_L001_R2_001.fastq.gz
+* library_L002_R1_001.fastq.gz
+* library_L002_R2_001.fastq.gz
+* library_L003_R1_001.fastq.gz
+* library_L003_R2_001.fastq.gz
+* library_L004_R1_001.fastq.gz
+* library_L004_R2_001.fastq.gz
 
 # Steps
 
 1. Merge lanes
+
 ```{bash}
-submit_mergeLanes.sh MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_AH2FMNBGX9_S1_L00 MB-2-gastruloid-plateF-C5-transcriptome-FACS0108
+submit_mergeLanes.sh library_L00 library
 ```
-This will produce two new fastq files, named _MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_R1.fastq.gz_ and _MB-2-gastruloid-plateF-C5-transcriptome-FACS0108_R2.fastq.gz_, which contain all the merged reads from R1 and R2 fastq files, respectively. You can keep these and remove all the initial fastq files. 
+This will produce two new fastq files, named _library_R1.fastq.gz_ and _library_R2.fastq.gz_, which contain all the merged reads from R1 and R2 fastq files, respectively. You can keep these and remove all the initial fastq files. 
 
 2. Demultiplex reads
+
 ```{bash}
-submit_extractBC.sh MB-2-gastruloid-plateG-C5-transcriptome-FACS0108 celseq2
+submit_extractBC.sh library celseq2
 ```
-Here we filter out reads that do not have a celseq2 barcode. We produce a new fastq file 
+Here we filter out reads that do not have a celseq2 barcode. We produce a new fastq file named _library\_cbc.fastq.gz_.
 
 3. Trim data
+
 ```{bash}
-submit_trim.sh MB-2-gastruloid-plateG-C5-transcriptome-FACS0108.fq.gz
+submit_trim.sh library_cbc.fastq.gz
 ```
+
+This will remove illumina adaptors from the end of the reads, and additionally will also get rid of bad quality base calls at the 3'-end of reads. A new file is produced, named _library\_cbc_trimmed.fq.gz_. 
 
 4. Map and get count tables
 ```{bash}
