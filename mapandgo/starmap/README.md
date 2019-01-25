@@ -1,5 +1,5 @@
-Map transcriptome data with star. 
-Get a table of unspliced and spliced transcripts.
+# Map transcriptome data with star. 
+We start from fastq files and end up with a table of unspliced and spliced transcripts per gene. 
 
 Let's assume we start with the following fastq files:
 
@@ -12,7 +12,7 @@ Let's assume we start with the following fastq files:
 * library_L004_R1_001.fastq.gz
 * library_L004_R2_001.fastq.gz
 
-# Steps
+## Steps
 
 1. Merge lanes
 
@@ -38,16 +38,20 @@ This will remove illumina adaptors from the end of the reads, and additionally w
 
 4. Map with star
 ```{bash}
+email=a.alemany@hubrecht.eu
+file=library\_cbc_trimmed.fq.gz
+
 path2star=/hpc/hub_oudenaarden/avo/nascent/STAR-2.5.3a/bin/Linux_x86_64
 starMouseRef=/hpc/hub_oudenaarden/group_references/ensembl/93/mus_musculus/star_index_75
 intron=/hpc/hub_oudenaarden/group_references/ensembl/93/mus_musculus/annotations_ensembl_93_mm_introns_exonsubtracted.bed
 exon=/hpc/hub_oudenaarden/group_references/ensembl/93/mus_musculus/annotations_ensembl_93_mm_exons.bed
 
-file=library\_cbc_trimmed.fq.gz
 outfq=${file%.fq.gz}_star
 
 echo "${path2star}/STAR --runThreadN 12 --genomeDir ${starMouseRef} --readFilesIn ${file} --readFilesCommand zcat --outFileNamePrefix ${outfq} --outSAMtype BAM SortedByCoordinate --outSAMattributes All --outSAMstrandField intronMotif --outFilterMultimapNmax 1" | qsub -cwd -N star -m eas -M ${email} -pe threaded 12 -l h_rt=5:00:00 -l h_vmem=30G
 ````
+We map using the STAR software to the reference genome (not transcriptome!). STAR needs a lot of memory, but generally goes very fast. 
+After mapping, a bam file named library\_cbc_trimmedAligned.sortedByCoord.out.bam will be produced. 
 
 4. Get count tables
 
