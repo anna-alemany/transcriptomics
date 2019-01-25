@@ -53,6 +53,13 @@ echo "${path2star}/STAR --runThreadN 12 --genomeDir ${starMouseRef} --readFilesI
 We map using the STAR software to the reference genome (not transcriptome!). STAR needs a lot of memory, but generally goes very fast. 
 After mapping, a bam file named library\_cbc_trimmedAligned.sortedByCoord.out.bam will be produced. 
 
+To quickly assess mappability, we can do it from the bamfile. This command will give you the number of uniquely mapped reads:
+
+````{bash}
+samtools view -q 255 merge_SvdB12e1-1-2-Tomo1-5dAA-mG_oud2555_oud2280_cbc_trimmed_starAligned.sortedByCoord.out.bam | wc
+````
+
+
 4. Get count tables
 
 ````
