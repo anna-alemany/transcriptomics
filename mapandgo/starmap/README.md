@@ -36,17 +36,23 @@ submit_trim.sh library_cbc.fastq.gz
 
 This will remove illumina adaptors from the end of the reads, and additionally will also get rid of bad quality base calls at the 3'-end of reads. A new file is produced, named _library\_cbc_trimmed.fq.gz_. 
 
-4. Map and get count tables
+4. Map with star
 ```{bash}
 path2star=/hpc/hub_oudenaarden/avo/nascent/STAR-2.5.3a/bin/Linux_x86_64
 starMouseRef=/hpc/hub_oudenaarden/group_references/ensembl/93/mus_musculus/star_index_75
 intron=/hpc/hub_oudenaarden/group_references/ensembl/93/mus_musculus/annotations_ensembl_93_mm_introns_exonsubtracted.bed
 exon=/hpc/hub_oudenaarden/group_references/ensembl/93/mus_musculus/annotations_ensembl_93_mm_exons.bed
 
-file=
-
+file=library\_cbc_trimmed.fq.gz
 outfq=${file%.fq.gz}_star
-echo $file $outfq
+
 echo "${path2star}/STAR --runThreadN 12 --genomeDir ${starMouseRef} --readFilesIn ${file} --readFilesCommand zcat --outFileNamePrefix ${outfq} --outSAMtype BAM SortedByCoordinate --outSAMattributes All --outSAMstrandField intronMotif --outFilterMultimapNmax 1" | qsub -cwd -N star -m eas -M ${email} -pe threaded 12 -l h_rt=5:00:00 -l h_vmem=30G
+````
+
+4. Get count tables
+
+````
+bamfile=library_cbc_trimmed_starAligned.sortedByCoord.out.bam
+
 echo "/hpc/hub_oudenaarden/aalemany/bin/RNAvelocity/getIntronsExons.sh ${outfq}Aligned.sortedByCoord.out.bam $intron $exon ${outfq}_ie" | qsub -V -cwd -N RNAv -hold_jid star -m eas -M ${email} -pe threaded 2 -l h_rt=24:00:00 -l h_vmem=30G
 ```
