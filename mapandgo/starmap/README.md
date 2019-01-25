@@ -56,7 +56,7 @@ After mapping, a bam file named library\_cbc_trimmedAligned.sortedByCoord.out.ba
 To quickly assess mappability, we can do it from the bamfile. This command will give you the number of uniquely mapped reads:
 
 ````{bash}
-samtools view -q 255 merge_SvdB12e1-1-2-Tomo1-5dAA-mG_oud2555_oud2280_cbc_trimmed_starAligned.sortedByCoord.out.bam | wc
+samtools view -q 255 library_cbc_trimmed_starAligned.sortedByCoord.out.bam | wc
 ````
 
 
