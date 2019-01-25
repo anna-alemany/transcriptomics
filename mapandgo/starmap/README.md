@@ -14,21 +14,21 @@ Let's assume we start with the following fastq files:
 
 ## Steps
 
-1. Merge lanes
+### 1. Merge lanes
 
 ```{bash}
 submit_mergeLanes.sh library_L00 library
 ```
 This will produce two new fastq files, named _library_R1.fastq.gz_ and _library_R2.fastq.gz_, which contain all the merged reads from R1 and R2 fastq files, respectively. You can keep these and remove all the initial fastq files. 
 
-2. Demultiplex reads
+### 2. Demultiplex reads
 
 ```{bash}
 submit_extractBC.sh library celseq2
 ```
 Here we filter out reads that do not have a celseq2 barcode. We produce a new fastq file named _library\_cbc.fastq.gz_.
 
-3. Trim data
+### 3. Trim data
 
 ```{bash}
 submit_trim.sh library_cbc.fastq.gz
@@ -36,7 +36,7 @@ submit_trim.sh library_cbc.fastq.gz
 
 This will remove illumina adaptors from the end of the reads, and additionally will also get rid of bad quality base calls at the 3'-end of reads. A new file is produced, named _library\_cbc_trimmed.fq.gz_. 
 
-4. Map with star
+### 4. Map with star
 ```{bash}
 email=a.alemany@hubrecht.eu
 file=library\_cbc_trimmed.fq.gz
@@ -61,7 +61,7 @@ samtools view -q 255 library_cbc_trimmed_starAligned.sortedByCoord.out.bam | wc
 ````
 The mappability is equal to the division of the first number by the second. 
 
-4. Get count tables
+### 5. Get count tables
 
 ````
 bamfile=library_cbc_trimmed_starAligned.sortedByCoord.out.bam
