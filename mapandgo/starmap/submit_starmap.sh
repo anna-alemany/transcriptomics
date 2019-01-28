@@ -8,7 +8,6 @@ fi
 file=$1
 
 email=a.alemany@hubrecht.eu
-file=library\_cbc_trimmed.fq.gz
 
 path2star=/hpc/hub_oudenaarden/avo/nascent/STAR-2.5.3a/bin/Linux_x86_64
 starMouseRef=/hpc/hub_oudenaarden/group_references/ensembl/93/mus_musculus/star_index_75
