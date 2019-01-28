@@ -1,4 +1,5 @@
-# Map transcriptome data with star. 
+# Map transcriptome data with star
+
 We start from fastq files and end up with a table of unspliced and spliced transcripts per gene. 
 
 Let's assume we start with the following fastq files:
@@ -37,23 +38,14 @@ submit_trim.sh library_cbc.fastq.gz
 This will remove illumina adaptors from the end of the reads, and additionally will also get rid of bad quality base calls at the 3'-end of reads. A new file is produced, named _library\_cbc_trimmed.fq.gz_. 
 
 ### 4. Map with star
+
 ```{bash}
-email=a.alemany@hubrecht.eu
-file=library\_cbc_trimmed.fq.gz
-
-path2star=/hpc/hub_oudenaarden/avo/nascent/STAR-2.5.3a/bin/Linux_x86_64
-starMouseRef=/hpc/hub_oudenaarden/group_references/ensembl/93/mus_musculus/star_index_75
-intron=/hpc/hub_oudenaarden/group_references/ensembl/93/mus_musculus/annotations_ensembl_93_mm_introns_exonsubtracted.bed
-exon=/hpc/hub_oudenaarden/group_references/ensembl/93/mus_musculus/annotations_ensembl_93_mm_exons.bed
-
-outfq=${file%.fq.gz}_star
-
-echo "${path2star}/STAR --runThreadN 12 --genomeDir ${starMouseRef} --readFilesIn ${file} --readFilesCommand zcat --outFileNamePrefix ${outfq} --outSAMtype BAM SortedByCoordinate --outSAMattributes All --outSAMstrandField intronMotif --outFilterMultimapNmax 1" | qsub -cwd -N star -m eas -M ${email} -pe threaded 12 -l h_rt=5:00:00 -l h_vmem=30G
+submit_starmap.sh library\_cbc_trimmed.fq.gz
 ````
 We map using the STAR software to the reference genome (not transcriptome!). STAR needs a lot of memory, but generally goes very fast. 
 After mapping, a bam file named library\_cbc_trimmedAligned.sortedByCoord.out.bam will be produced. 
 
-To quickly assess mappability, we can do it from the bamfile. These two command will give you the number of reads and the number of uniquely mapped reads, respectively:
+To quickly assess mappability, we can do it from eiter the bam file of the coutc.tsv file. This last file is produced in the next step, so for now I will focus here on the bam file. The two following commands will give you the number of reads and the number of uniquely mapped reads, respectively:
 
 ````{bash}
 zcat library_cbc_trimmed.fq.gz | grep '+' | wc
@@ -63,8 +55,8 @@ The mappability is equal to the division of the first number by the second.
 
 ### 5. Get count tables
 
+````{bash}
+submit_starTables.sh library_cbc_trimmed_starAligned.sortedByCoord.out.bam intron_file.bed exon_file.bed output_name
 ````
-bamfile=library_cbc_trimmed_starAligned.sortedByCoord.out.bam
+This will produce a total of 9 files:
 
-echo "/hpc/hub_oudenaarden/aalemany/bin/RNAvelocity/getIntronsExons.sh ${outfq}Aligned.sortedByCoord.out.bam $intron $exon ${outfq}_ie" | qsub -V -cwd -N RNAv -hold_jid star -m eas -M ${email} -pe threaded 2 -l h_rt=24:00:00 -l h_vmem=30G
-```
