@@ -1,5 +1,12 @@
 #!/bin/bash
 
+if [ $# -ne 1 ] 
+then
+  echo "Please, give input fq.gz file"
+fi
+
+file=$1
+
 email=a.alemany@hubrecht.eu
 file=library\_cbc_trimmed.fq.gz
 
