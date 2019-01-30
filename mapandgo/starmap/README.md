@@ -13,7 +13,7 @@ Let's assume we start with the following fastq files:
 * library_L004_R1_001.fastq.gz
 * library_L004_R2_001.fastq.gz
 
-## Steps
+## Steps by step description
 
 ### 1. Merge lanes
 
@@ -61,4 +61,23 @@ The mappability is equal to the division of the first number by the second.
 submit_starTables.sh library_cbc_trimmed_starAligned.sortedByCoord.out.bam intron_file.bed exon_file.bed output_name
 ````
 This will produce a total of 9 files:
+* output_name_unspliced.coutc.tsv
+* output_name_spliced.coutc.tsv
+* output_name_total.coutc.tsv
+
+* output_name_unspliced.coutb.tsv
+* output_name_spliced.coutb.tsv
+* output_name_total.coutb.tsv
+
+* output_name_unspliced.coutt.tsv
+* output_name_spliced.coutt.tsv
+* output_name_total.coutt.tsv
+
+Unspliced, spliced or total denotes whether the read contains some region in an intron (unspliced) or an exon (spliced) of the annotated gene. Total does not take introns/exons into account. coutc refers to the total number of reads, coutb to the total number of observed UMIs, and coutt is the total number of unique transcripts. The last one is obtained from coutb by applying the Poisson correction described by D. Grun in his Nature paper. 
+
+
+## Shortcut
+
+
+
 
