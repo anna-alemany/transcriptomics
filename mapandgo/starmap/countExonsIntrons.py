@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sys, os
 from pandas.io.parsers import read_csv
 import numpy as np
@@ -22,6 +23,9 @@ def getCellUmi(h):
 
 
 cnt = {}
+cntreadi = {}
+cntreade = {}
+cntread = {}
 for label, bedfile in [('intron', bedintronfile), ('exon', bedexonfile)]:
     with open(bedfile) as f:
         for line in f:
@@ -40,30 +44,49 @@ for label, bedfile in [('intron', bedintronfile), ('exon', bedexonfile)]:
                         cnt[cell][gene] = {umi: Counter([label])}
                     except:
                         cnt[cell] = {gene: {umi: Counter([label])}}
+            if label == 'intron':
+                try:
+                    cntreadi[cell][gene] += 1
+                except:
+                    try:
+                        cntreadi[cell][gene] =  1
+                    except:
+                        cntreadi[cell] = {gene: 1}
+
+            if label == 'exon':
+                try:
+                    cntreade[cell][gene] += 1
+                except:
+                    try:
+                        cntreade[cell][gene] = 1
+                    except:
+                        cntreade[cell] = {gene: 1}
+
+            try:
+                cntread[cell][gene] += 1
+            except:
+                try:
+                    cntread[cell][gene] = 1
+                except:
+                    cntread[cell] = {gene: 1}
 
 df = pd.DataFrame(cnt)
+dfri = pd.DataFrame(cntreadi)
+dfre = pd.DataFrame(cntreade)
+dfr = pd.DataFrame(cntread)
 
-def countUnsplicedReads(x):
-    y = 0
-    if type(x) == dict:
-        for umi in x:
-            if 'intron' in x[umi]:
-                y += x[umi]['intron']
-    return y
+cols = sorted(df.columns)
+df = df[cols]
+cols = sorted(dfri.columns)
+dfri = dfri[cols].fillna(0).astype(int)
+cols = sorted(dfre.columns)
+dfre = dfre[cols].fillna(0).astype(int)
+cols = sorted(dfr.columns)
+dfr = dfr[cols].fillna(0).astype(int)
 
-def countSplicedReads(x):
-    y = 0
-    if type(x) == dict:
-        for umi in x:
-            if 'intron' not in x[umi]:
-                y += x[umi]['exon']
-    return y
-
-def countTotalReads(x):
-    y = 0
-    if type(x) == dict:
-        y = sum([d[umi][ex] for umi in x for ex in x[umi]])
-    return y
+dfri.to_csv(output + '_unspliced.coutc.tsv', sep = '\t')
+dfre.to_csv(output + '_spliced.coutc.tsv', sep = '\t')
+dfr.to_csv(output + '_total.coutc.tsv', sep = '\t')
 
 def countUnsplicedMolecules(x):
     y = 0
@@ -81,14 +104,6 @@ def countSplicedMolecules(x):
                 y += 1
     return y
 
-def countReads(x):
-    y = 0
-    if type(x) == dict:
-        for umi in x:
-            for label in x[umi]:
-                y += x[umi][label]
-    return y
-    
 def bc2trans(x):
     if x >= K:
         t = np.log(1.-(float(K)-1e-3)/K)/np.log(1.-1./K)
@@ -97,12 +112,6 @@ def bc2trans(x):
     elif x == 0:
         t = 0
     return  t
-
-udf = df.applymap(countUnsplicedReads)
-sdf = df.applymap(countSplicedReads)
-
-udf.to_csv(output + '_unspliced.coutc.tsv', sep = '\t')
-sdf.to_csv(output + '_spliced.coutc.tsv', sep = '\t')
 
 udf = df.applymap(countUnsplicedMolecules)
 sdf = df.applymap(countSplicedMolecules)
