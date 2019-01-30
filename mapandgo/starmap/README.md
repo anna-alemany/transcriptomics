@@ -27,7 +27,9 @@ This will produce two new fastq files, named _library_R1.fastq.gz_ and _library_
 ```{bash}
 submit_extractBC.sh library celseq2
 ```
-Here we filter out reads that do not have a celseq2 barcode. We produce a new fastq file named _library\_cbc.fastq.gz_.
+Here we filter out reads that do not have a celseq2 barcode. The protocol celseq2 can be replaced by celseq1 or nla. 
+
+This produces a new fastq file named _library\_cbc.fastq.gz_.
 
 ### 3. Trim data
 
