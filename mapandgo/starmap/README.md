@@ -77,7 +77,9 @@ Unspliced, spliced or total denotes whether the read contains some region in an 
 
 
 ## Shortcut
-submit_array_starmap.sh library_L00 celseq2 mouse
 
+```bash
+submit_array_starmap.sh library_L00 celseq2 mouse
+```
 
 
