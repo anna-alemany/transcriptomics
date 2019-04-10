@@ -10,7 +10,7 @@ except:
     sys.exit("Please, give: (1) gtf file; (2) exons")
 
 #### Convert gtf file in an easy to handle data frame ####
-df = read_csv(gtffile, comment='#', header=None, sep = '\t')
+df = read_csv(gtffile, comment='#', header=None, sep = '\t', low_memory = False)
 df.columns = ['seqname', 'source', 'feature', 'start', 'end', 'score', 'strand', 'frame', 'attribute']
 df['seqname'] = df['seqname'].astype(str)
 df['attribute'] = [{f.rsplit()[0]:f.rsplit()[1].replace('"','') for f in df.loc[idx,'attribute'].rsplit(';') if len(f.rsplit())==2} for idx in df.index]
