@@ -11,6 +11,15 @@ do
   srr=$(esearch -db sra -query $gsm | efetch -format runinfo | awk -F "," '{print $1}' | grep 'SRR'); echo $gsm $srr; 
 done > SRR_Sample.txt
 ```
+you can alternatively obtain all SRR id's from the SRP number:
+```{bash}
+SRA=$1
+esearch -db sra -query $SRA | \
+  efetch -format docsum | \
+  xtract -pattern DocumentSummary -element Run@acc | \
+  tr '\t' '\n'
+```
+
 
 3. Change download directory by writing:
 ```{bash}
