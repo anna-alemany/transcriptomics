@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sys, os
 from pandas.io.parsers import read_csv
 import numpy as np
