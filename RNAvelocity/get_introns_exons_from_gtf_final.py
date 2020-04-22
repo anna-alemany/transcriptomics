@@ -6,7 +6,7 @@ import pandas as pd
 
 try:
     gtffile = sys.argv[1]
-    outputfile = sys.argv[2]
+    output = sys.argv[2]
 except:
     sys.exit("Please, give: (1) gtf file; (2) exons")
 
